@@ -8,20 +8,66 @@ id INT AUTO_INCREMENT,
 plans VARCHAR(50) NOT NULL,
 price DECIMAL(5,2),
 CONSTRAINT PRIMARY KEY (id)
-);
+)engine = InnoDB;
+
+CREATE TABLE artist(
+artist_id INT AUTO_INCREMENT,
+artist_name VARCHAR(100) NOT NULL,
+CONSTRAINT PRIMARY KEY (artist_id)
+)engine = InnoDB;
+
+CREATE TABLE album (
+album_id INT AUTO_INCREMENT,
+artist_id INT,
+album_name VARCHAR(100) NOT NULL,
+release_year YEAR,
+CONSTRAINT PRIMARY KEY (album_id),
+FOREIGN KEY(artist_id) REFERENCES artist (artist_id)
+)engine = InnoDB;
+
+CREATE TABLE songs (
+song_id INT AUTO_INCREMENT,
+album_id INT,
+song_name VARCHAR(100) NOT NULL,
+duration_time_seconds INT,
+CONSTRAINT PRIMARY KEY (song_id),
+FOREIGN KEY(album_id) REFERENCES album (album_id)
+)engine = InnoDB;
+
+CREATE TABLE users (
+users_id INT AUTO_INCREMENT,
+plans_id INT,
+user_name VARCHAR(100) NOT NULL,
+user_age INT NOT NULL,
+signature_date DATE,
+CONSTRAINT PRIMARY KEY (users_id),
+FOREIGN KEY(plans_id) REFERENCES plans (id)
+)engine = InnoDB;
+
+CREATE TABLE followers (
+followers_id INT AUTO_INCREMENT NOT NULL,
+artist_id INT NOT NULL,
+users_id INT NOT NULL,
+CONSTRAINT PRIMARY KEY (followers_id, artist_id, users_id),
+FOREIGN KEY(artist_id) REFERENCES artist (artist_id),
+FOREIGN KEY(users_id) REFERENCES users (users_id)
+)engine = InnoDB;
+
+CREATE TABLE history_songs (
+history_songs_id INT AUTO_INCREMENT NOT NULL,
+song_id INT NOT NULL,
+users_id INT NOT NULL,
+last_reproduction DATETIME NOT NULL,
+CONSTRAINT PRIMARY KEY (history_songs_id, song_id, users_id),
+FOREIGN KEY(song_id) REFERENCES songs (song_id),
+FOREIGN KEY(users_id) REFERENCES users (users_id)
+)engine = InnoDB;
 
 INSERT INTO plans (plans, price) VALUES 
 ('gratuito', 0),
 ('pessoal', 6.99),
 ('familiar', 7.99),
 ('universitario', 5.99);
-
-
-CREATE TABLE artist(
-artist_id INT AUTO_INCREMENT,
-artist_name VARCHAR(100) NOT NULL,
-CONSTRAINT PRIMARY KEY (artist_id)
-);
 
 INSERT INTO artist (artist_name) VALUES 
 ('Walter Phoenix'),
@@ -30,17 +76,6 @@ INSERT INTO artist (artist_name) VALUES
 ('Freedie Shannon'),
 ('Tyler Isle'),
 ('Fog');
-
-
-CREATE TABLE album(
-album_id INT AUTO_INCREMENT,
-artist_id INT,
-album_name VARCHAR(100) NOT NULL,
-release_year YEAR,
-CONSTRAINT PRIMARY KEY (album_id),
-FOREIGN KEY(artist_id) REFERENCES artist (artist_id)
-);
-
 
 INSERT INTO album (artist_id, album_name, release_year) VALUES 
 (1, 'Envious', 1990),
@@ -53,16 +88,6 @@ INSERT INTO album (artist_id, album_name, release_year) VALUES
 (5, 'Cabinet of fools', 2012),
 (5, 'No guarantees', 2015),
 (6, 'Apparatus', 2015);
-
-
-CREATE TABLE songs (
-song_id INT AUTO_INCREMENT,
-album_id INT,
-song_name VARCHAR(100) NOT NULL,
-duration_time_seconds INT,
-CONSTRAINT PRIMARY KEY (song_id),
-FOREIGN KEY(album_id) REFERENCES album (album_id)
-);
 
 
 INSERT INTO songs (album_id, song_name, duration_time_seconds) VALUES 
@@ -107,18 +132,6 @@ INSERT INTO songs (album_id, song_name, duration_time_seconds) VALUES
 (10, "Baby",136),
 (10, "You Make Me Feel So..",83);
 
-
-CREATE TABLE users (
-users_id INT AUTO_INCREMENT,
-plans_id INT,
-user_name VARCHAR(100) NOT NULL,
-user_age INT NOT NULL,
-signature_date DATE,
-CONSTRAINT PRIMARY KEY (users_id),
-FOREIGN KEY(plans_id) REFERENCES plans (id)
-);
-
-
 INSERT INTO users (plans_id, user_name, user_age, signature_date) VALUES 
 (1,'Thati',23, '2019-10-20'),
 (3,'Cintia',35, '2017-12-30'),
@@ -131,17 +144,6 @@ INSERT INTO users (plans_id, user_name, user_age, signature_date) VALUES
 (3,'Angelina',42, '2018-04-29'),
 (3,'Paul',46, '2017-01-17');
 
-
-CREATE TABLE followers (
-followers_id INT AUTO_INCREMENT NOT NULL,
-artist_id INT NOT NULL,
-users_id INT NOT NULL,
-CONSTRAINT PRIMARY KEY (followers_id),
-FOREIGN KEY(artist_id) REFERENCES artist (artist_id),
-FOREIGN KEY(users_id) REFERENCES users (users_id)
-);
-
-
 INSERT INTO followers (users_id, artist_id) VALUES 
 (1,1),(1,4),(1,3),
 (2,1),(2,3),
@@ -153,18 +155,6 @@ INSERT INTO followers (users_id, artist_id) VALUES
 (8,1),(8,5),
 (9,6),(9,4),(9,3),
 (10,2),(10,6);
-
-
-CREATE TABLE history_songs (
-history_songs_id INT AUTO_INCREMENT NOT NULL,
-song_id INT NOT NULL,
-users_id INT NOT NULL,
-last_reproduction DATETIME NOT NULL,
-CONSTRAINT PRIMARY KEY (history_songs_id),
-FOREIGN KEY(song_id) REFERENCES songs (song_id),
-FOREIGN KEY(users_id) REFERENCES users (users_id)
-);
-
 
 INSERT INTO history_songs (users_id, song_id, last_reproduction) VALUES 
 (1,36,'2020-02-28 10:45:55'),(1,25,'2020-05-02 05:30:35'),(1,23,'2020-03-06 11:22:33'),(1,14,'2020-08-05 08:05:17'),(1,15,'2020-09-14 16:32:22'),
