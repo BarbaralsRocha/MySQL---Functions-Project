@@ -3,7 +3,7 @@
     "tabela_que_contem_usuario": "users",
     "coluna_plano": "plans",
     "tabela_que_contem_plano": "plans",
-    "coluna_historico_de_reproducoes": "history_songs_id",
+    "coluna_historico_de_reproducoes": "users_id",
     "tabela_que_contem_historico_de_reproducoes": "history_songs",
     "coluna_seguindo_artistas": "followers_id",
     "tabela_que_contem_seguindo_artistas": "followers",
